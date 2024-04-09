@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: greetings-deployment
+  labels:
+    app: greetings
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: greetings
+  template:
+    metadata:
+      labels:
+        app: greetings
+    spec:
+      containers:
+      - name: greetings
+        image: greetings:1.0
