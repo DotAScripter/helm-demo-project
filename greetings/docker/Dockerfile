@@ -1,0 +1,9 @@
+FROM ubuntu:23.10
+
+ARG PROJECT
+
+COPY ./${PROJECT} /usr/local/bin
+
+ENV ENTRYOINT_PATH="/usr/local/bin/${PROJECT}"
+
+ENTRYPOINT $ENTRYOINT_PATH
