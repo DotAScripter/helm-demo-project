@@ -1,19 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: greetings-deployment
-  labels:
-    app: greetings
+  name: {{ .Release.Name }}-http-server
 spec:
-  replicas: 3
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: greetings
+      app: {{ template "greetings.name" . }}
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: greetings
+        app: {{ template "greetings.name" . }}
+        release: {{ .Release.Name }}
     spec:
       containers:
-      - name: greetings
-        image: greetings:1.0
+        - name: http-server
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: {{ .Values.service.port }}
+          env:
+            - name: HTTP_PORT
+              value: {{ quote .Values.service.port }}
