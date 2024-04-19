@@ -1,0 +1,9 @@
+dependencies:
+- name: redis
+  repository: file://../redis
+  version: 0.0.1-0
+- name: greetings
+  repository: file://../greetings
+  version: 0.0.1-0
+digest: sha256:c903acdecd26ac6cf5638bd0c1c9d0cff71c38da64b2c1918c0e6cad0485020e
+generated: "2024-04-18T13:49:08.8301684Z"

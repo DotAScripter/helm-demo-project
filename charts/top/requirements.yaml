@@ -1,0 +1,9 @@
+dependencies:
+- condition: redis.enabled
+  name: redis
+  repository: "file://../redis"
+  version: 0.0.1-0
+- condition: greetings.enabled
+  name: greetings
+  repository: "file://../greetings"
+  version: 0.0.1-0

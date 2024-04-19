@@ -1,0 +1,4 @@
+redis:
+  enabled: true
+greetings:
+  enabled: true
