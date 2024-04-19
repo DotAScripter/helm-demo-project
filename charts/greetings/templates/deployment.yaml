@@ -18,7 +18,11 @@ spec:
         - name: http-server
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.env.service.port }}
           env:
             - name: HTTP_PORT
-              value: {{ quote .Values.service.port }}
+              value: {{ quote .Values.env.service.port }}
+            - name: REDIS_HOST
+              value: {{ quote .Values.env.redis.host }}
+            - name: REDIS_PORT
+              value: {{ quote .Values.env.redis.port }}

@@ -1,65 +1,43 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"net/http"
+	"log/slog"
 	"os"
 
-	"github.com/redis/go-redis/v9"
+	"github.com/DotAScripter/helm-demo-project/greetings/kvdb"
+	"github.com/DotAScripter/helm-demo-project/greetings/service"
 )
 
-const defaultPort = "3000"
+const (
+	defaultHttpPort  = "3000"
+	defaultRedisHost = "redis"
+	defaultRedisPort = "6379"
+)
 
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Got request!")
-	fmt.Fprintf(w, "Hello, World!\n")
+func readEnv(name, defaultVal string) string {
+	envVal := os.Getenv(name)
+	if envVal == "" {
+		return defaultVal
+	}
+	return envVal
 }
 
 func main() {
-	fmt.Println("Hello world!")
+	var logLevel = new(slog.LevelVar) // Info by default
+	logLevel.Set(slog.LevelDebug)
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: logLevel}))
+	slog.SetDefault(logger)
 
-	httpPort := os.Getenv("HTTP_PORT")
+	httpPort := readEnv("HTTP_PORT", defaultHttpPort)
+	redisHost := readEnv("REDIS_HOST", defaultRedisHost)
+	redisPort := readEnv("REDIS_PORT", defaultRedisPort)
 
-	// Check if the environment variable is set
-	if httpPort == "" {
-		fmt.Println("HTTP_PORT is not set using default:", defaultPort)
-		httpPort = defaultPort
-	} else {
-		fmt.Println("HTTP_PORT is set to:", httpPort)
-	}
+	slog.Info("Started", "httpPort", httpPort, "redisHost", redisHost, "redisPort", redisPort)
 
-	redisClient := redis.NewClient(&redis.Options{
-		Addr:     "redis:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
-	})
+	kvdb := kvdb.NewKVDB(redisHost, redisPort)
+	service := service.NewService(httpPort, kvdb)
 
-	http.HandleFunc("/", handler)
-	http.HandleFunc("/redis/set", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Got request! /redis/set")
-		err := redisClient.Set(context.Background(), "testkey", "testval", 0).Err()
-		if err != nil {
-			fmt.Println("/redis/set NOK, err:", err)
-			fmt.Fprintf(w, "/redis/set NOK, err:%v\n", err)
-			return
-		}
-		fmt.Fprintf(w, "/redis/set OK\n")
-	})
-	http.HandleFunc("/redis/get", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println("Got request! /redis/get")
-		val, err := redisClient.Get(context.Background(), "testkey").Result()
-		if err != nil {
-			fmt.Println("/redis/get NOK, err:", err)
-			fmt.Fprintf(w, "/redis/get NOK, err:%v\n", err)
-			return
-		}
-		fmt.Fprintf(w, "/redis/get OK val:%s\n", val)
-	})
-	fmt.Println("Server is listening on port", httpPort)
-	err := http.ListenAndServe(fmt.Sprintf(":%s", httpPort), nil)
-	if err != nil {
-		fmt.Println("Error starting server:", err)
-	}
+	service.Start()
+
 	select {}
 }
