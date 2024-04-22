@@ -10,6 +10,8 @@ import (
 const (
 	redisSetPath   = "/redis/set"
 	redisGetPath   = "/redis/get"
+	key            = "testkey"
+	value          = "testvalue"
 	helloWorldPath = "/"
 )
 
@@ -18,6 +20,7 @@ type (
 		Set(context.Context, string, any) error
 		Get(context.Context, string) (string, error)
 	}
+
 	serviceImpl struct {
 		kvdb   kvdb
 		port   string
@@ -55,10 +58,11 @@ func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 
 func (s *serviceImpl) handleRedisSet(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("Got request", "path", redisSetPath)
-	err := s.kvdb.Set(context.Background(), "testkey", "testval")
+	err := s.kvdb.Set(context.Background(), key, value)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Failed to handle request on path %s, err: %v", redisSetPath, err))
-		fmt.Fprintf(w, "%s, err:%v\n", redisSetPath, err)
+		w.WriteHeader(http.StatusBadRequest)
+		fmt.Fprintf(w, "%s NOK, err:%v\n", redisSetPath, err)
 		return
 	}
 	fmt.Fprintf(w, "%s OK\n", redisSetPath)
@@ -66,9 +70,10 @@ func (s *serviceImpl) handleRedisSet(w http.ResponseWriter, r *http.Request) {
 
 func (s *serviceImpl) handleRedisGet(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("Got request", "path", redisGetPath)
-	val, err := s.kvdb.Get(context.Background(), "testkey")
+	val, err := s.kvdb.Get(context.Background(), key)
 	if err != nil {
 		slog.Error(fmt.Sprintf("Failed to handle request on path %s, err: %v", redisGetPath, err))
+		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintf(w, "%s NOK, err:%v\n", redisGetPath, err)
 		return
 	}

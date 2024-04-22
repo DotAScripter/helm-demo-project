@@ -39,3 +39,9 @@ func (db *kvdbImpl) Get(ctx context.Context, key string) (string, error) {
 	}
 	return val, nil
 }
+
+func (db *kvdbImpl) Close() {
+	if err := db.client.Close(); err != nil {
+		slog.Warn(fmt.Sprintf("Failed to Close DB err:%v", err))
+	}
+}
