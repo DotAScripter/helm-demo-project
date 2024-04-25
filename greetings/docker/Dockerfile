@@ -1,4 +1,6 @@
-FROM ubuntu:23.10
+FROM alpine:3.19.1
+
+RUN apk add libc6-compat
 
 ARG PROJECT
 
