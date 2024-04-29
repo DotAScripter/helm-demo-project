@@ -3,7 +3,10 @@
 {
 	"name": "Go",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/go:1-1.22-bookworm",
+	"build": {
+		// Path is relative to the devcontainer.json file.
+		"dockerfile": "Dockerfile"
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
@@ -15,7 +18,8 @@
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
 			"minikube": "none",
 			"version": "latest"
-		}
+		},
+		"ghcr.io/devcontainers-contrib/features/protoc:1": {}
 	},
 
 	// Use 'postCreateCommand' to run commands after the container is created.
