@@ -1,0 +1,6 @@
+replicaCount: 1
+image:
+  repository: jpod
+  tag: "1.0"
+service:
+  port: 8082
