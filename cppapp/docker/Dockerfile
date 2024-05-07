@@ -1,11 +1,12 @@
-FROM alpine:3.19.1
+FROM ubuntu:24.04
 
-RUN apk add libc6-compat
-RUN apk add --no-cache libstdc++
-RUN apk add --no-cache libgcc
+RUN apt-get update && \
+    apt-get install -y build-essential
 
-# Install Boost dependencies
-RUN apk add boost-dev
+RUN apt install -y libprotobuf-dev libgrpc-dev libgrpc++-dev
+RUN apt install -y autoconf libtool pkg-config
+
+RUN apt-get install -y libboost-all-dev
 
 ARG PROJECT
 

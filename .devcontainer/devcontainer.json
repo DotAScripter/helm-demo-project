@@ -18,8 +18,8 @@
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
 			"minikube": "none",
 			"version": "latest"
-		},
-		"ghcr.io/devcontainers-contrib/features/protoc:1": {}
+		}
+		//"ghcr.io/devcontainers-contrib/features/protoc:1": {}
 	},
 
 	// Use 'postCreateCommand' to run commands after the container is created.

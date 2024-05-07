@@ -9,7 +9,7 @@ GOBUILD := $(GO) build -o docker/$(PROJECT)
 GOTEST := $(GO) test $(TEST_DIRS) --failfast -race
 
 .PHONY: build
-build:
+build: protogen
 	$(GOBUILD)
 
 .PHONY: image

@@ -4,6 +4,10 @@ FROM mcr.microsoft.com/devcontainers/go:1-1.22-bookworm
 RUN apt-get update && \
     apt-get install -y build-essential
 
+#libprotoc-dev libc-ares-dev grpc
+RUN apt install -y protobuf-compiler libprotobuf-dev protobuf-compiler-grpc libgrpc-dev libgrpc++-dev
+RUN apt install -y autoconf libtool pkg-config
+
 # Install Boost dependencies
 RUN apt-get install -y libboost-all-dev
 

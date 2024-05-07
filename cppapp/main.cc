@@ -2,12 +2,22 @@
 #include <boost/beast/http.hpp>
 #include <boost/asio.hpp>
 #include <iostream>
+#include <grpcpp/grpcpp.h>
+#include "proto/helloworld.pb.h"
+#include "proto/helloworld.grpc.pb.h"
 
 namespace beast = boost::beast;
 namespace http = beast::http;
 namespace net = boost::asio;
 
 using tcp = net::ip::tcp;
+using grpc::Server;
+using grpc::ServerBuilder;
+using grpc::ServerContext;
+using grpc::Status;
+using helloworld::Greeter;
+using helloworld::HelloRequest;
+using helloworld::HelloReply;
 
 void handle_request(http::request<http::string_body>&& req, tcp::socket& socket) {
     // Create a response
@@ -26,7 +36,30 @@ void handle_request(http::request<http::string_body>&& req, tcp::socket& socket)
     socket.shutdown(tcp::socket::shutdown_send, ec);
 }
 
+class GreeterServiceImpl final : public Greeter::Service {
+  Status SayHello(ServerContext* context, const HelloRequest* request,
+                  HelloReply* reply) override {
+    std::string prefix("Hello, ");
+    reply->set_message(prefix + request->name());
+    return Status::OK;
+  }
+};
+
+void RunServer() {
+  std::string server_address("0.0.0.0:50051");
+  GreeterServiceImpl service;
+
+  ServerBuilder builder;
+  builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+  builder.RegisterService(&service);
+
+  std::unique_ptr<Server> server(builder.BuildAndStart());
+  std::cout << "Server listening on " << server_address << std::endl;
+  server->Wait();
+}
+
 int main() {
+    RunServer();
     try {
         // Create io_context and acceptor
         net::io_context io_context(1);
