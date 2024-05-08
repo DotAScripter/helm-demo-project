@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/DotAScripter/helm-demo-project/greetings/client"
 	"github.com/DotAScripter/helm-demo-project/greetings/kvdb"
 	"github.com/DotAScripter/helm-demo-project/greetings/service"
 )
@@ -35,7 +36,15 @@ func main() {
 	slog.Info("Started", "httpPort", httpPort, "redisHost", redisHost, "redisPort", redisPort)
 
 	kvdb := kvdb.NewKVDB(redisHost, redisPort)
-	service := service.NewService(httpPort, kvdb)
+
+	cppServiceHost := readEnv("CPP_SERVICE_HOST", "")
+	cppServicePort := readEnv("CPP_SERVICE_PORT", "")
+	slog.Info("CppService", "cppServicePort", cppServicePort, "cppServiceHost", cppServiceHost)
+	helloClient, err := client.NewClient(cppServiceHost, cppServicePort)
+	if err != nil {
+		panic(err)
+	}
+	service := service.NewService(httpPort, kvdb, helloClient)
 
 	service.Start()
 

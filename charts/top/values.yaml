@@ -2,3 +2,5 @@ redis:
   enabled: true
 greetings:
   enabled: true
+cppod:
+  enabled: true

@@ -20,6 +20,10 @@ type mockKVDB struct {
 	mock.Mock
 }
 
+type mockHelloer struct {
+	mock.Mock
+}
+
 func (m *mockKVDB) Set(ctx context.Context, key string, val any) error {
 	args := m.Called(ctx, key, val)
 	return args.Error(0)
@@ -30,28 +34,43 @@ func (m *mockKVDB) Get(ctx context.Context, key string) (string, error) {
 	return args.String(0), args.Error(1)
 }
 
+func (m *mockHelloer) SayHello(ctx context.Context) (string, error) {
+	args := m.Called(ctx)
+	return args.String(0), args.Error(1)
+}
+
 func TestService(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	service := NewService(port, kvdbMock)
+	helloerMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, helloerMock)
 	service.Start()
 }
 
 func TestHandleHelloWorld(t *testing.T) {
-	req, err := http.NewRequest(http.MethodGet, redisSetPath, nil)
+	kvdbMock := new(mockKVDB)
+	helloerMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, helloerMock)
+
+	response := "Hello, World!"
+
+	req, err := http.NewRequest(http.MethodGet, helloWorldPath, nil)
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(helloWorldHandler)
+	handler := http.HandlerFunc(service.helloWorldHandler)
+
+	helloerMock.On("SayHello", mock.Anything).Return(response, nil)
 
 	handler.ServeHTTP(rr, req)
 
 	assert.Equal(t, http.StatusOK, rr.Code)
-	assert.Contains(t, rr.Body.String(), "Hello, World!")
+	assert.Contains(t, rr.Body.String(), fmt.Sprintf("Response:%s", response))
 }
 
 func TestHandleRedisSet(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	service := NewService(port, kvdbMock)
+	helloerMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, helloerMock)
 
 	req, err := http.NewRequest(http.MethodGet, redisSetPath, nil)
 	assert.NoError(t, err)
@@ -69,7 +88,8 @@ func TestHandleRedisSet(t *testing.T) {
 
 func TestHandleRedisGet(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	service := NewService(port, kvdbMock)
+	helloerMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, helloerMock)
 
 	req, err := http.NewRequest(http.MethodGet, redisGetPath, nil)
 	assert.NoError(t, err)
@@ -87,7 +107,8 @@ func TestHandleRedisGet(t *testing.T) {
 
 func TestHandleRedisSetError(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	service := NewService(port, kvdbMock)
+	helloerMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, helloerMock)
 
 	req, err := http.NewRequest(http.MethodGet, redisSetPath, nil)
 	assert.NoError(t, err)
@@ -107,7 +128,8 @@ func TestHandleRedisSetError(t *testing.T) {
 
 func TestHandleRedisGetError(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	service := NewService(port, kvdbMock)
+	helloerMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, helloerMock)
 
 	req, err := http.NewRequest(http.MethodGet, redisGetPath, nil)
 	assert.NoError(t, err)

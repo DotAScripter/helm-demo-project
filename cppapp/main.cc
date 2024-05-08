@@ -45,8 +45,21 @@ class GreeterServiceImpl final : public Greeter::Service {
   }
 };
 
+
+std::string getEnvOrDefault(const char* name, const std::string& defaultValue) {
+    char* envValue = std::getenv(name);
+    if (envValue == nullptr){
+      return defaultValue;
+    }
+    return std::string(envValue);
+}
+
 void RunServer() {
-  std::string server_address("0.0.0.0:50051");
+  std::string port = getEnvOrDefault("SERVICE_PORT", "50051");
+  std::string server_address = getEnvOrDefault("SERVICE_ADDRESS", "127.0.0.1");
+  server_address.append(":");
+  server_address.append(port);
+  std::cout << server_address << std::endl;
   GreeterServiceImpl service;
 
   ServerBuilder builder;

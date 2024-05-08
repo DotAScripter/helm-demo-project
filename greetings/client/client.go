@@ -24,6 +24,7 @@ func NewClient(host, port string) (*clientImpl, error) {
 	conn, err := grpc.Dial(fmt.Sprintf("%s:%s", host, port), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		slog.Error(fmt.Sprintf("Error dialing server: %v", err))
+		return nil, err
 	}
 	return &clientImpl{
 		client: pb.NewGreeterClient(conn),

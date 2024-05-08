@@ -8,3 +8,6 @@ env:
   redis:
     host: redis
     port: 6379
+  cppService:
+    host: cppod-service
+    port: 50051

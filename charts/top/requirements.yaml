@@ -7,3 +7,7 @@ dependencies:
   name: greetings
   repository: "file://../greetings"
   version: 0.0.1-0
+- condition: cppod.enabled
+  name: cppod
+  repository: "file://../cppod"
+  version: 0.0.1-0

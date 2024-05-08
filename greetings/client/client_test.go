@@ -19,7 +19,6 @@ const (
 	port      = "50051"
 )
 
-// server is used to implement helloworld.GreeterServer.
 type server struct {
 	pb.UnimplementedGreeterServer
 }
@@ -37,7 +36,6 @@ func TestSayHello(t *testing.T) {
 	assert.Equal(t, "Hello hello", s)
 }
 
-// SayHello implements helloworld.GreeterServer
 func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
 	log.Printf("Received: %v", in.GetName())
 	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil

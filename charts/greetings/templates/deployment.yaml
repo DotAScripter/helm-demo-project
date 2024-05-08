@@ -26,3 +26,7 @@ spec:
               value: {{ quote .Values.env.redis.host }}
             - name: REDIS_PORT
               value: {{ quote .Values.env.redis.port }}
+            - name: CPP_SERVICE_HOST
+              value: {{ quote .Values.env.cppService.host }}
+            - name: CPP_SERVICE_PORT
+              value: {{ quote .Values.env.cppService.port }}

@@ -12,7 +12,7 @@ const (
 	redisGetPath   = "/redis/get"
 	key            = "testkey"
 	value          = "testvalue"
-	helloWorldPath = "/"
+	helloWorldPath = "/hello"
 )
 
 type (
@@ -21,25 +21,31 @@ type (
 		Get(context.Context, string) (string, error)
 	}
 
+	helloer interface {
+		SayHello(ctx context.Context) (string, error)
+	}
+
 	serviceImpl struct {
-		kvdb   kvdb
-		port   string
-		server *http.Server
+		kvdb    kvdb
+		port    string
+		server  *http.Server
+		helloer helloer
 	}
 )
 
-func NewService(port string, kvdb kvdb) *serviceImpl {
+func NewService(port string, kvdb kvdb, helloer helloer) *serviceImpl {
 	return &serviceImpl{
 		kvdb: kvdb,
 		port: port,
 		server: &http.Server{
 			Addr: fmt.Sprintf(":%s", port),
 		},
+		helloer: helloer,
 	}
 }
 
 func (s *serviceImpl) Start() {
-	http.HandleFunc(helloWorldPath, helloWorldHandler)
+	http.HandleFunc(helloWorldPath, s.helloWorldHandler)
 	http.HandleFunc(redisSetPath, s.handleRedisSet)
 	http.HandleFunc(redisGetPath, s.handleRedisGet)
 	go func() {
@@ -51,9 +57,14 @@ func (s *serviceImpl) Start() {
 	}()
 }
 
-func helloWorldHandler(w http.ResponseWriter, r *http.Request) {
+func (s *serviceImpl) helloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	slog.Debug("Got request", "path", helloWorldPath)
-	fmt.Fprintf(w, "Hello, World!\n")
+	resp, err := s.helloer.SayHello(context.Background())
+	if err != nil {
+		fmt.Fprintf(w, "%s NOK, err:%v\n", helloWorldPath, err)
+		return
+	}
+	fmt.Fprintf(w, "%s Response:%s\n", helloWorldPath, resp)
 }
 
 func (s *serviceImpl) handleRedisSet(w http.ResponseWriter, r *http.Request) {

@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-cppapp
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "cppod.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "cppod.name" . }}
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: cppapp
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: {{ .Values.env.service.port }}
+          env:
+            - name: SERVICE_PORT
+              value: {{ quote .Values.env.service.port }}
+            - name: SERVICE_ADDRESS
+              value: {{ quote .Values.env.service.address }}
+
