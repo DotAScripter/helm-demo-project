@@ -25,7 +25,7 @@ LIBS = -lgrpc++ -lgrpc -lprotobuf -lpthread -ldl -lgpr -labsl_synchronization
 
 .PHONY: image
 image:
-	mv $(TARGET) docker
+	cp $(TARGET) docker
 	docker build --build-arg PROJECT=$(PROJECT) ./docker -t $(PROJECT):1.0
 
 .PHONY: protogen
@@ -34,7 +34,7 @@ protogen: $(PROTO_GRPC_TARGET) $(PROTO_TARGET)
 $(TARGET): $(OBJS) $(PROTO_GRPC_TARGET) $(PROTO_TARGET)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
 
-$(OBJ_DIR)/%.o: %.cc | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: %.cc | $(OBJ_DIR) protogen
 	$(CXX) $(CXXFLAGS) -I$(GRPC_INCLUDE) -I$(PROTOBUF_INCLUDE) -c -o $@ $<
 
 $(PROTO_GRPC_TARGET): $(PROTO_SRCS) | $(PROTO_TARGET_DIR)
