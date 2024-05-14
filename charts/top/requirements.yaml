@@ -11,3 +11,8 @@ dependencies:
   name: cppod
   repository: "file://../cppod"
   version: 0.0.1-0
+- condition: jpod.enabled
+  name: jpod
+  repository: "file://../jpod"
+  version: 0.0.1-0
+

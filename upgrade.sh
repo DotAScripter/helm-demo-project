@@ -12,6 +12,10 @@ log "Building Cpp app and image..."
 make -C cppapp cppapp image
 log "Done building Cpp app and image"
 
+log "Building Java app and image..."
+make -C jpod/jpod build image
+log "Done building Java app and image"
+
 log "Running helm dependency update..."
 helm dependency update charts/top
 log "Done running helm dependency update"

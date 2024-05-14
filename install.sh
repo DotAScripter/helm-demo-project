@@ -12,6 +12,10 @@ log "Building Cpp app and image..."
 make -C cppapp cppapp image
 log "Done building Cpp app and image"
 
+log "Building Java app and image..."
+make -C jpod/jpod build image
+log "Done building Java app and image"
+
 log "Running helm dependency update..."
 helm dependency update charts/top
 log "Done running helm dependency update"
@@ -21,7 +25,7 @@ kind create cluster --config=kind_config.yaml
 log "Done creating kind kubernetes cluster"
 
 log "Loading docker images into kind cluster (this might take some time)..."
-kind load docker-image greetings:1.0 cppapp:1.0
+kind load docker-image greetings:1.0 cppapp:1.0 jpod:1.0
 log "Done loading docker images into kind cluster"
 
 log "Running helm install..."

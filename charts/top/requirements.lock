@@ -8,5 +8,8 @@ dependencies:
 - name: cppod
   repository: file://../cppod
   version: 0.0.1-0
-digest: sha256:f8eadcae1b24b84511d9b6d2ca85e431ef06ed3fda8c11718135b2a7c5391d87
-generated: "2024-05-08T11:15:45.9238851Z"
+- name: jpod
+  repository: file://../jpod
+  version: 0.0.1-0
+digest: sha256:8dabadf8350bbcf7991136b9b10544ae692586d97d3a3f0d95e37f43da30508b
+generated: "2024-05-15T07:58:21.161662328Z"

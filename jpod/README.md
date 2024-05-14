@@ -7,15 +7,20 @@
 
 3. Setup port (optional)
 To set the inter-service port, run:
-'export JPOD_HTTP_PORT=[port]'
+'export JPOD_SERVICE_PORT=[port]'
 If not set, this will default to 8082
+
+To set the http port, run:
+'export JPOD_HTTP_PORT=[port]'
+If not set, this will default to 8083
+
 
 4. Run executable
 'java -jar ./target/jpod-1.0.jar' 
 
 5. Build docker image
 In top directory of project run:
-'docker build -t jpod .'
+'docker build -t jpod:1.0 .'
 
 6. Run docker image
 When docker image with tag 'jpod' is built run:

@@ -4,3 +4,5 @@ image:
   tag: "1.0"
 service:
   port: 8082
+http: 
+  port: 8083

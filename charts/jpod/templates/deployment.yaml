@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-java-server
+  name: {{ template "jpod.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -15,10 +15,12 @@ spec:
         release: {{ .Release.Name }}
     spec:
       containers:
-        - name: java-server
+        - name: jpod
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
             - containerPort: {{ .Values.service.port }}
           env:
             - name: JPOD_HTTP_PORT
+              value: {{ quote .Values.http.port }}
+            - name: JPOD_SERVICE_PORT
               value: {{ quote .Values.service.port }}
