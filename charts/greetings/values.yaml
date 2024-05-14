@@ -6,7 +6,7 @@ env:
   service:
     port: 3000
   redis:
-    host: redis
+    host: redis-service
     port: 6379
   cppService:
     host: cppod-service

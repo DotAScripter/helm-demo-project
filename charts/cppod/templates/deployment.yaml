@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-cppapp
+  name: {{ template "cpp.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: {{ template "cppod.name" . }}
+      app: {{ template "cpp.name" . }}
       release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: {{ template "cppod.name" . }}
+        app: {{ template "cpp.name" . }}
         release: {{ .Release.Name }}
         # To force the pod being recreated even if it has the same tag
         date: {{ now | unixEpoch | quote }}
     spec:
       containers:
-        - name: cppapp
+        - name: {{ template "cpp.container-name" . }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
             - containerPort: {{ .Values.env.service.port }}

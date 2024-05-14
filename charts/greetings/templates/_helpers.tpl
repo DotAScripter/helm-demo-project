@@ -1,4 +1,14 @@
-{{/* _helpers.tpl or deployment.yaml */}}
+{{/* Pod name */}}
 {{- define "greetings.name" -}}
-{{- printf "%s-%s" .Release.Name "greetings" -}}
+    {{- .Chart.Name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/* Container name */}}
+{{- define "greetings.container-name" -}}
+    {{- printf "greetings" -}}
+{{- end -}}
+
+{{/* Service name */}}
+{{- define "greetings.service-name" -}}
+    {{- printf "%s-service" .Chart.Name -}}
 {{- end -}}

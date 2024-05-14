@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}-http-server
+  name: {{ template "greetings.name" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -17,7 +17,7 @@ spec:
         date: {{ now | unixEpoch | quote }}
     spec:
       containers:
-        - name: http-server
+        - name: {{ template "greetings.container-name" . }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
             - containerPort: {{ .Values.env.service.port }}

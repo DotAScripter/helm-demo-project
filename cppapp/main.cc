@@ -39,6 +39,7 @@ void handle_request(http::request<http::string_body>&& req, tcp::socket& socket)
 class GreeterServiceImpl final : public Greeter::Service {
   Status SayHello(ServerContext* context, const HelloRequest* request,
                   HelloReply* reply) override {
+    std::cout << "GreeterServiceImpl handling HelloRequest: " << request->DebugString() << std::endl;
     std::string prefix("Hello, ");
     reply->set_message(prefix + request->name());
     return Status::OK;
@@ -59,7 +60,6 @@ void RunServer() {
   std::string server_address = getEnvOrDefault("SERVICE_ADDRESS", "127.0.0.1");
   server_address.append(":");
   server_address.append(port);
-  std::cout << server_address << std::endl;
   GreeterServiceImpl service;
 
   ServerBuilder builder;
