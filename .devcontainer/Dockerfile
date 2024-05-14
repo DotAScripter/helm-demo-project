@@ -6,7 +6,7 @@ RUN apt-get update && \
 
 #libprotoc-dev libc-ares-dev grpc
 RUN apt install -y protobuf-compiler libprotobuf-dev protobuf-compiler-grpc libgrpc-dev libgrpc++-dev
-RUN apt install -y autoconf libtool pkg-config
+RUN apt install -y autoconf libtool pkg-config python3 python3-pip python3-flask python3-waitress
 
 # Install Boost dependencies
 RUN apt-get install -y libboost-all-dev

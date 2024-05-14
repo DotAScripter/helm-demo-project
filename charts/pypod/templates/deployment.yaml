@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "py.name" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "py.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "py.name" . }}
+        release: {{ .Release.Name }}
+        # To force the pod being recreated even if it has the same tag
+        date: {{ now | unixEpoch | quote }}
+    spec:
+      containers:
+        - name: {{ template "py.container-name" . }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          ports:
+            - containerPort: {{ .Values.env.service.port }}
+          env:
+            - name: HTTP_PORT
+              value: {{ quote .Values.env.service.port }}
