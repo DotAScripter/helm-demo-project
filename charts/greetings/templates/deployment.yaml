@@ -13,6 +13,8 @@ spec:
       labels:
         app: {{ template "greetings.name" . }}
         release: {{ .Release.Name }}
+        # To force the pod being recreated even if it has the same tag
+        date: {{ now | unixEpoch | quote }}
     spec:
       containers:
         - name: http-server

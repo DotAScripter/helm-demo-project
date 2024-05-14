@@ -13,6 +13,8 @@ spec:
       labels:
         app: {{ template "cppod.name" . }}
         release: {{ .Release.Name }}
+        # To force the pod being recreated even if it has the same tag
+        date: {{ now | unixEpoch | quote }}
     spec:
       containers:
         - name: cppapp
@@ -24,4 +26,3 @@ spec:
               value: {{ quote .Values.env.service.port }}
             - name: SERVICE_ADDRESS
               value: {{ quote .Values.env.service.address }}
-
