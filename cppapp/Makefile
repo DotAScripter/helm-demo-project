@@ -3,16 +3,16 @@ REPO_ROOT := $(shell git rev-parse --show-toplevel 2> /dev/null)
 
 GRPC_CPP_PLUGIN_PATH ?= `which grpc_cpp_plugin`
 PROTOC ?= `which protoc`
-PROTO_SRCS := $(REPO_ROOT)/interface/helloworld.proto
-PROTO_GRPC_TARGET := proto/helloworld.grpc.pb.cc
-PROTO_TARGET := proto/helloworld.pb.cc
+PROTO_SRCS := $(REPO_ROOT)/interface/helloworld/helloworld.proto
+PROTO_GRPC_TARGET := proto/helloworld/helloworld.grpc.pb.cc
+PROTO_TARGET := proto/helloworld/helloworld.pb.cc
 PROTO_TARGET_DIR := proto
 
 CXX=g++
 CXXFLAGS=-std=c++11 -Wall
 
 OBJ_DIR := out
-SRC_DIRS := ./ ./proto
+SRC_DIRS := ./ ./proto/helloworld ./proto
 SRCS := $(foreach dir,$(SRC_DIRS),$(wildcard $(dir)*.cc))
 OBJ_DIR := out
 OBJS := $(patsubst %.cc,$(OBJ_DIR)/%.o,$(notdir $(SRCS)))
@@ -32,10 +32,10 @@ image:
 protogen: $(PROTO_GRPC_TARGET) $(PROTO_TARGET)
 
 $(TARGET): $(OBJS) $(PROTO_GRPC_TARGET) $(PROTO_TARGET)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIBS) -I$(PROTO_TARGET_DIR)
 
 $(OBJ_DIR)/%.o: %.cc | $(OBJ_DIR) protogen
-	$(CXX) $(CXXFLAGS) -I$(GRPC_INCLUDE) -I$(PROTOBUF_INCLUDE) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) -I$(GRPC_INCLUDE) -I$(PROTOBUF_INCLUDE) -I$(PROTO_TARGET_DIR) -c -o $@ $<
 
 $(PROTO_GRPC_TARGET): $(PROTO_SRCS) | $(PROTO_TARGET_DIR)
 	$(PROTOC) -I $(REPO_ROOT)/interface --grpc_out=proto --plugin=protoc-gen-grpc=$(GRPC_CPP_PLUGIN_PATH) $<

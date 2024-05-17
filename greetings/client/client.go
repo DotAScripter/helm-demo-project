@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 
-	pb "github.com/DotAScripter/helm-demo-project/greetings/proto"
+	pb "github.com/DotAScripter/helm-demo-project/greetings/proto/helloworld"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

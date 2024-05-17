@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/DotAScripter/helm-demo-project/greetings/client"
-	pb "github.com/DotAScripter/helm-demo-project/greetings/proto"
+	pb "github.com/DotAScripter/helm-demo-project/greetings/proto/helloworld"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 )
