@@ -8,11 +8,12 @@ import (
 )
 
 const (
-	redisSetPath   = "/redis/set"
-	redisGetPath   = "/redis/get"
-	key            = "testkey"
-	value          = "testvalue"
-	helloWorldPath = "/hello"
+	redisSetPath = "/redis/set"
+	redisGetPath = "/redis/get"
+	key          = "testkey"
+	value        = "testvalue"
+	helloCppod   = "/hello/cppod"
+	helloJpod    = "/hello/jpod"
 )
 
 type (
@@ -26,26 +27,29 @@ type (
 	}
 
 	serviceImpl struct {
-		kvdb    kvdb
-		port    string
-		server  *http.Server
-		helloer helloer
+		kvdb         kvdb
+		port         string
+		server       *http.Server
+		cppodHelloer helloer
+		jpodHelloer  helloer
 	}
 )
 
-func NewService(port string, kvdb kvdb, helloer helloer) *serviceImpl {
+func NewService(port string, kvdb kvdb, cppodHelloer, jpodHelloer helloer) *serviceImpl {
 	return &serviceImpl{
 		kvdb: kvdb,
 		port: port,
 		server: &http.Server{
 			Addr: fmt.Sprintf(":%s", port),
 		},
-		helloer: helloer,
+		cppodHelloer: cppodHelloer,
+		jpodHelloer:  jpodHelloer,
 	}
 }
 
 func (s *serviceImpl) Start() {
-	http.HandleFunc(helloWorldPath, s.helloWorldHandler)
+	http.HandleFunc(helloCppod, s.helloCppod)
+	http.HandleFunc(helloJpod, s.helloJpod)
 	http.HandleFunc(redisSetPath, s.handleRedisSet)
 	http.HandleFunc(redisGetPath, s.handleRedisGet)
 	go func() {
@@ -57,14 +61,24 @@ func (s *serviceImpl) Start() {
 	}()
 }
 
-func (s *serviceImpl) helloWorldHandler(w http.ResponseWriter, r *http.Request) {
-	slog.Debug("Got request", "path", helloWorldPath)
-	resp, err := s.helloer.SayHello(context.Background())
+func (s *serviceImpl) helloCppod(w http.ResponseWriter, r *http.Request) {
+	slog.Debug("Got request", "path", helloCppod)
+	resp, err := s.cppodHelloer.SayHello(context.Background())
 	if err != nil {
-		fmt.Fprintf(w, "%s NOK, err:%v\n", helloWorldPath, err)
+		fmt.Fprintf(w, "%s NOK, err:%v\n", helloCppod, err)
 		return
 	}
-	fmt.Fprintf(w, "%s Response:%s\n", helloWorldPath, resp)
+	fmt.Fprintf(w, "%s Response:%s\n", helloCppod, resp)
+}
+
+func (s *serviceImpl) helloJpod(w http.ResponseWriter, r *http.Request) {
+	slog.Debug("Got request", "path", helloJpod)
+	resp, err := s.jpodHelloer.SayHello(context.Background())
+	if err != nil {
+		fmt.Fprintf(w, "%s NOK, err:%v\n", helloJpod, err)
+		return
+	}
+	fmt.Fprintf(w, "%s Response:%s\n", helloJpod, resp)
 }
 
 func (s *serviceImpl) handleRedisSet(w http.ResponseWriter, r *http.Request) {

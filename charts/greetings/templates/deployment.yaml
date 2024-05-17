@@ -32,3 +32,7 @@ spec:
               value: {{ quote .Values.env.cppService.host }}
             - name: CPP_SERVICE_PORT
               value: {{ quote .Values.env.cppService.port }}
+            - name: JPOD_SERVICE_HOST
+              value: {{ quote .Values.env.jpodService.host }}
+            - name: JPOD_SERVICE_PORT
+              value: {{ quote .Values.env.jpodService.port }}

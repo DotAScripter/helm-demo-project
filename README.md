@@ -7,11 +7,11 @@
 1. kind create cluster --config=kind_config.yaml
 2. make -C greetings build image
 3. make -C cppapp cppapp image
-3. make -C jpod/jpod build image
-4. kind load docker-image greetings:1.0 cppapp:1.0 jpod:1.0
-5. helm dependency update charts/top
-6. helm install test charts/top
-7. Verify using curl http://127.0.0.1:30000/hello
+4. make -C jpod/jpod build image
+5. kind load docker-image greetings:1.0 cppapp:1.0 jpod:1.0
+6. helm dependency update charts/top
+7. helm install test charts/top
+8. Verify using curl http://127.0.0.1:30000/hello/cppod
 
 ### Using script
 
@@ -23,6 +23,6 @@
 
 1. helm dependency update charts/top
 
-## Run unit-tests
+## Run unit-tests (only for greetings app so far)
 
 1. make -C greetings test

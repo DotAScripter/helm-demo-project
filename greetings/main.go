@@ -15,14 +15,6 @@ const (
 	defaultRedisPort = "6379"
 )
 
-func readEnv(name, defaultVal string) string {
-	envVal := os.Getenv(name)
-	if envVal == "" {
-		return defaultVal
-	}
-	return envVal
-}
-
 func main() {
 	var logLevel = new(slog.LevelVar) // Info by default
 	logLevel.Set(slog.LevelDebug)
@@ -40,13 +32,31 @@ func main() {
 	cppServiceHost := readEnv("CPP_SERVICE_HOST", "")
 	cppServicePort := readEnv("CPP_SERVICE_PORT", "")
 	slog.Info("CppService", "cppServicePort", cppServicePort, "cppServiceHost", cppServiceHost)
-	helloClient, err := client.NewClient(cppServiceHost, cppServicePort)
+	cppodClient, err := client.NewClient(cppServiceHost, cppServicePort)
 	if err != nil {
+		slog.Error("Failed to start cppodClient", "err", err)
 		panic(err)
 	}
-	service := service.NewService(httpPort, kvdb, helloClient)
+
+	jpodServiceHost := readEnv("JPOD_SERVICE_HOST", "")
+	jpodServicePort := readEnv("JPOD_SERVICE_PORT", "")
+	slog.Info("JpodService", "jpodServicePort", jpodServicePort, "jpodServiceHost", jpodServiceHost)
+	jpodClient, err := client.NewClient(jpodServiceHost, jpodServicePort)
+	if err != nil {
+		slog.Error("Failed to start jpodClient", "err", err)
+		panic(err)
+	}
+	service := service.NewService(httpPort, kvdb, cppodClient, jpodClient)
 
 	service.Start()
 
 	select {}
+}
+
+func readEnv(name, defaultVal string) string {
+	envVal := os.Getenv(name)
+	if envVal == "" {
+		return defaultVal
+	}
+	return envVal
 }

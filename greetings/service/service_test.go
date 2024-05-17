@@ -41,25 +41,49 @@ func (m *mockHelloer) SayHello(ctx context.Context) (string, error) {
 
 func TestService(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	helloerMock := new(mockHelloer)
-	service := NewService(port, kvdbMock, helloerMock)
+	cppodClientMock := new(mockHelloer)
+	jpodClientMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, cppodClientMock, jpodClientMock)
 	service.Start()
 }
 
-func TestHandleHelloWorld(t *testing.T) {
+func TestHandleHelloCppod(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	helloerMock := new(mockHelloer)
-	service := NewService(port, kvdbMock, helloerMock)
+	cppodClientMock := new(mockHelloer)
+	jpodClientMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, cppodClientMock, jpodClientMock)
 
 	response := "Hello, World!"
 
-	req, err := http.NewRequest(http.MethodGet, helloWorldPath, nil)
+	req, err := http.NewRequest(http.MethodGet, helloCppod, nil)
 	assert.NoError(t, err)
 
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(service.helloWorldHandler)
+	handler := http.HandlerFunc(service.helloCppod)
 
-	helloerMock.On("SayHello", mock.Anything).Return(response, nil)
+	cppodClientMock.On("SayHello", mock.Anything).Return(response, nil)
+
+	handler.ServeHTTP(rr, req)
+
+	assert.Equal(t, http.StatusOK, rr.Code)
+	assert.Contains(t, rr.Body.String(), fmt.Sprintf("Response:%s", response))
+}
+
+func TestHandleHelloJpod(t *testing.T) {
+	kvdbMock := new(mockKVDB)
+	cppodClientMock := new(mockHelloer)
+	jpodClientMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, cppodClientMock, jpodClientMock)
+
+	response := "Hello, World!"
+
+	req, err := http.NewRequest(http.MethodGet, helloJpod, nil)
+	assert.NoError(t, err)
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(service.helloJpod)
+
+	jpodClientMock.On("SayHello", mock.Anything).Return(response, nil)
 
 	handler.ServeHTTP(rr, req)
 
@@ -69,8 +93,9 @@ func TestHandleHelloWorld(t *testing.T) {
 
 func TestHandleRedisSet(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	helloerMock := new(mockHelloer)
-	service := NewService(port, kvdbMock, helloerMock)
+	cppodClientMock := new(mockHelloer)
+	jpodClientMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, cppodClientMock, jpodClientMock)
 
 	req, err := http.NewRequest(http.MethodGet, redisSetPath, nil)
 	assert.NoError(t, err)
@@ -88,8 +113,9 @@ func TestHandleRedisSet(t *testing.T) {
 
 func TestHandleRedisGet(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	helloerMock := new(mockHelloer)
-	service := NewService(port, kvdbMock, helloerMock)
+	cppodClientMock := new(mockHelloer)
+	jpodClientMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, cppodClientMock, jpodClientMock)
 
 	req, err := http.NewRequest(http.MethodGet, redisGetPath, nil)
 	assert.NoError(t, err)
@@ -107,8 +133,9 @@ func TestHandleRedisGet(t *testing.T) {
 
 func TestHandleRedisSetError(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	helloerMock := new(mockHelloer)
-	service := NewService(port, kvdbMock, helloerMock)
+	cppodClientMock := new(mockHelloer)
+	jpodClientMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, cppodClientMock, jpodClientMock)
 
 	req, err := http.NewRequest(http.MethodGet, redisSetPath, nil)
 	assert.NoError(t, err)
@@ -128,8 +155,9 @@ func TestHandleRedisSetError(t *testing.T) {
 
 func TestHandleRedisGetError(t *testing.T) {
 	kvdbMock := new(mockKVDB)
-	helloerMock := new(mockHelloer)
-	service := NewService(port, kvdbMock, helloerMock)
+	cppodClientMock := new(mockHelloer)
+	jpodClientMock := new(mockHelloer)
+	service := NewService(port, kvdbMock, cppodClientMock, jpodClientMock)
 
 	req, err := http.NewRequest(http.MethodGet, redisGetPath, nil)
 	assert.NoError(t, err)

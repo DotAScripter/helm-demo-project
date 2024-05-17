@@ -8,7 +8,12 @@
     {{- printf "jpod" -}}
 {{- end -}}
 
-{{/* Service name */}}
-{{- define "jpod.service-name" -}}
-    {{- printf "%s-service" .Chart.Name -}}
+{{/* HTTP Service name */}}
+{{- define "jpod.http-service-name" -}}
+    {{- printf "%s-http-service" .Chart.Name -}}
+{{- end -}}
+
+{{/* gRPC service name */}}
+{{- define "jpod.grpc-service-name" -}}
+    {{- printf "%s-grpc-service" .Chart.Name -}}
 {{- end -}}

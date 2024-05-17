@@ -11,3 +11,6 @@ env:
   cppService:
     host: cppod-service
     port: 50051
+  jpodService:
+    host: jpod-grpc-service
+    port: 8082

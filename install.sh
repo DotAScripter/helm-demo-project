@@ -31,6 +31,6 @@ log "Done loading docker images into kind cluster"
 log "Running helm install..."
 helm install test charts/top
 log "Helm installation is ready!"
-log "Test with: curl http://127.0.0.1:30000/hello"
+log "Test with: curl http://127.0.0.1:30000/hello/cppod"
 
 exit 0

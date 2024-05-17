@@ -27,4 +27,4 @@ log "Done loading docker images into kind cluster"
 log "Running helm upgrade..."
 helm upgrade test charts/top
 log "Helm upgrade is done"
-log "Test with: curl http://127.0.0.1:30000/hello"
+log "Test with: curl http://127.0.0.1:30000/hello/cppod"
