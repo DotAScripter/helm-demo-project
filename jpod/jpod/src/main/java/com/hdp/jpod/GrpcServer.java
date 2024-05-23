@@ -16,7 +16,6 @@ public class GrpcServer extends GreeterImplBase implements IServer {
     private boolean isUp;
 
     public GrpcServer() {
-
     }
     public GrpcServer(int serverPortNumber) {
         server = ServerBuilder.forPort(serverPortNumber)

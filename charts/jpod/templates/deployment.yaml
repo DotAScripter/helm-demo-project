@@ -18,9 +18,15 @@ spec:
         - name: jpod
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
-            - containerPort: {{ .Values.service.port }}
+            - containerPort: {{ .Values.env.jpod.port }}
           env:
-            - name: JPOD_HTTP_PORT
-              value: {{ quote .Values.http.port }}
+            - name: JPOD_SERVICE_IP
+              value: {{ quote .Values.env.jpod.host }}
             - name: JPOD_SERVICE_PORT
-              value: {{ quote .Values.service.port }}
+              value: {{ quote .Values.env.jpod.port }}
+            - name: JPOD_HTTP_PORT
+              value: {{ quote .Values.env.jpod.httpport }}
+            - name: CPPOD_SERVICE_IP
+              value: {{ quote .Values.env.cppService.host }}
+            - name: CPPOD_SERVICE_PORT
+              value: {{ quote .Values.env.cppService.port }}

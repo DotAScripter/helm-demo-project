@@ -2,7 +2,11 @@ replicaCount: 1
 image:
   repository: jpod
   tag: "1.0"
-service:
-  port: 8082
-http: 
-  port: 8083
+env: 
+  jpod:
+    host: jpod-grpc-service
+    port: 8082
+    httpport: 8083
+  cppService:
+    host: cppod-service
+    port: 50051

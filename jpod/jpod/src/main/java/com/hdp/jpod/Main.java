@@ -3,7 +3,7 @@ package com.hdp.jpod;
 public class Main {
     public static void main(String[] args) {
         IServer server = new GrpcServer(ClusterService.JPOD.getServicePort());
-        IServer httpServer = new JHttpServer(ClusterService.JPODHTTP.getServicePort());
+        IServer httpServer = new JHttpServer(ClusterService.JPODHTTP.getServicePort(), new GrpcClient());
 
         // Start server for contact with other grpc services
         server.start();
