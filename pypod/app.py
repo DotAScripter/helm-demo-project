@@ -5,8 +5,8 @@ import logging
 import sys
 import grpc
 import threading
-from proto.status import status_pb2
-from proto.status import status_pb2_grpc
+from interface.status import status_pb2
+from interface.status import status_pb2_grpc
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 
