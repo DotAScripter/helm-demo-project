@@ -19,9 +19,9 @@ image:
 .PHONY: protogen
 protogen:
 	mkdir -p proto/helloworld proto/status
-	protoc -I $(REPO_ROOT)/interface --go_out=proto/helloworld --go_opt=paths=source_relative --go-grpc_out=proto/helloworld --go-grpc_opt=paths=source_relative \
+	protoc -I $(REPO_ROOT)/interface --go_out=proto --go_opt=paths=source_relative --go-grpc_out=proto --go-grpc_opt=paths=source_relative \
 	helloworld/helloworld.proto
-	protoc -I $(REPO_ROOT)/interface --go_out=proto/status --go_opt=paths=source_relative --go-grpc_out=proto/status --go-grpc_opt=paths=source_relative \
+	protoc -I $(REPO_ROOT)/interface --go_out=proto --go_opt=paths=source_relative --go-grpc_out=proto --go-grpc_opt=paths=source_relative \
 	status/status.proto
 
 .PHONY: test

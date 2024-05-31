@@ -12,6 +12,7 @@ docker-run: image
 .PHONY: protogen
 protogen:
 	python3 -m grpc_tools.protoc -I$(REPO_ROOT)/ --python_out=. --grpc_python_out=. interface/status/status.proto
+	python3 -m grpc_tools.protoc -I$(REPO_ROOT)/ --python_out=. --grpc_python_out=. interface/helloworld/helloworld.proto
 
 .PHONY: clean
 clean:

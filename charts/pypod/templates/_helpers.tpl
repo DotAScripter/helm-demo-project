@@ -12,3 +12,13 @@
 {{- define "py.service-name" -}}
     {{- printf "%s-service" .Chart.Name -}}
 {{- end -}}
+
+{{/* Status service name */}}
+{{- define "status.service-name" -}}
+    {{- printf "%s-status-service" .Chart.Name -}}
+{{- end -}}
+
+{{/* Greeter service name */}}
+{{- define "greeter.service-name" -}}
+    {{- printf "%s-greeter-service" .Chart.Name -}}
+{{- end -}}

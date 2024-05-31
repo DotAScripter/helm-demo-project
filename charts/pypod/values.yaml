@@ -5,3 +5,7 @@ image:
 env:
   service:
     port: 8080
+  statusService:
+    port: 50051
+  greeterService:
+    port: 50052
