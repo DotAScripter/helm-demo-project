@@ -14,6 +14,7 @@ const (
 	value        = "testvalue"
 	helloCppod   = "/hello/cppod"
 	helloJpod    = "/hello/jpod"
+	helloPypod   = "/hello/pypod"
 )
 
 type (
@@ -32,10 +33,11 @@ type (
 		server       *http.Server
 		cppodHelloer helloer
 		jpodHelloer  helloer
+		pypodHelloer helloer
 	}
 )
 
-func NewService(port string, kvdb kvdb, cppodHelloer, jpodHelloer helloer) *serviceImpl {
+func NewService(port string, kvdb kvdb, cppodHelloer, jpodHelloer, pypodHelloer helloer) *serviceImpl {
 	return &serviceImpl{
 		kvdb: kvdb,
 		port: port,
@@ -44,12 +46,14 @@ func NewService(port string, kvdb kvdb, cppodHelloer, jpodHelloer helloer) *serv
 		},
 		cppodHelloer: cppodHelloer,
 		jpodHelloer:  jpodHelloer,
+		pypodHelloer: pypodHelloer,
 	}
 }
 
 func (s *serviceImpl) Start() {
 	http.HandleFunc(helloCppod, s.helloCppod)
 	http.HandleFunc(helloJpod, s.helloJpod)
+	http.HandleFunc(helloPypod, s.helloPypod)
 	http.HandleFunc(redisSetPath, s.handleRedisSet)
 	http.HandleFunc(redisGetPath, s.handleRedisGet)
 	go func() {
@@ -79,6 +83,16 @@ func (s *serviceImpl) helloJpod(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Fprintf(w, "%s Response:%s\n", helloJpod, resp)
+}
+
+func (s *serviceImpl) helloPypod(w http.ResponseWriter, r *http.Request) {
+	slog.Debug("Got request", "path", helloPypod)
+	resp, err := s.pypodHelloer.SayHello(context.Background())
+	if err != nil {
+		fmt.Fprintf(w, "%s NOK, err:%v\n", helloPypod, err)
+		return
+	}
+	fmt.Fprintf(w, "%s Response:%s\n", helloPypod, resp)
 }
 
 func (s *serviceImpl) handleRedisSet(w http.ResponseWriter, r *http.Request) {

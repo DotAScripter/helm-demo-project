@@ -46,7 +46,16 @@ func main() {
 		slog.Error("Failed to start jpodClient", "err", err)
 		panic(err)
 	}
-	service := service.NewService(httpPort, kvdb, cppodClient, jpodClient)
+
+	pypodServiceHost := readEnv("PYPOD_SERVICE_HOST", "")
+	pypodServicePort := readEnv("PYPOD_SERVICE_PORT", "")
+	slog.Info("JpodService", "pypodServicePort", pypodServicePort, "pypodServiceHost", pypodServiceHost)
+	pypodClient, err := client.NewClient(pypodServiceHost, pypodServicePort)
+	if err != nil {
+		slog.Error("Failed to start pypodClient", "err", err)
+		panic(err)
+	}
+	service := service.NewService(httpPort, kvdb, cppodClient, jpodClient, pypodClient)
 
 	service.Start()
 

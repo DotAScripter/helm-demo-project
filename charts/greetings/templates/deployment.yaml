@@ -36,3 +36,7 @@ spec:
               value: {{ quote .Values.env.jpodService.host }}
             - name: JPOD_SERVICE_PORT
               value: {{ quote .Values.env.jpodService.port }}
+            - name: PYPOD_SERVICE_HOST
+              value: {{ quote .Values.env.pypodService.host }}
+            - name: PYPOD_SERVICE_PORT
+              value: {{ quote .Values.env.pypodService.port }}

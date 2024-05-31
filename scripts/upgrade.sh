@@ -98,7 +98,7 @@ for service in "${services[@]}"; do
         log "Done building ${PYPOD} image"
 
         log "Loading docker image into kind cluster (this might take some time)..."
-        kind load docker-image ${PYPOD}:1.0
+        kind load docker-image pyapp:1.0
         log "Done loading docker image into kind cluster"
 
         helm_upgrade ${PYPOD}

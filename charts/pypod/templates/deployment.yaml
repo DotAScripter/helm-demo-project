@@ -21,6 +21,11 @@ spec:
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
             - containerPort: {{ .Values.env.service.port }}
+            - containerPort: {{ .Values.env.statusService.port }}
           env:
             - name: HTTP_PORT
               value: {{ quote .Values.env.service.port }}
+            - name: STATUS_PORT
+              value: {{ quote .Values.env.statusService.port }}
+            - name: GREETER_PORT
+              value: {{ quote .Values.env.greeterService.port }}
