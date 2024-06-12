@@ -15,6 +15,7 @@ helm_uninstall greetings
 helm_uninstall cppod
 helm_uninstall jpod
 helm_uninstall pypod
+helm_uninstall redis
 
 log "Deleting kind kubernetes cluster..."
 kind delete cluster

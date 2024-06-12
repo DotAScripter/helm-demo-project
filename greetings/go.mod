@@ -1,6 +1,6 @@
 module github.com/DotAScripter/helm-demo-project/greetings
 
-go 1.21.1
+go 1.22.4
 
 require (
 	github.com/alicebob/miniredis v2.5.0+incompatible

@@ -15,7 +15,7 @@ make -C greetings build image
 log "Done building Go app and image"
 
 log "Building Cpp app and image..."
-make -C cppapp cppapp image
+make -C cppapp protogen cppapp image
 log "Done building Cpp app and image"
 
 log "Building Java app and image..."
@@ -38,6 +38,7 @@ helm_install greetings
 helm_install cppod
 helm_install jpod
 helm_install pypod
+helm_install redis
 
 log "Test with: curl http://127.0.0.1:30000/hello/cppod"
 

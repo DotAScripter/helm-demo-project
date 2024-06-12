@@ -14,11 +14,12 @@
 			"version": "latest",
 			"moby": true
 		},
-		"ghcr.io/devcontainers-contrib/features/kind:1": {},
+		//"ghcr.io/devcontainers-contrib/features/kind:1": {},
 		"ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
 			"minikube": "none",
 			"version": "latest"
 		}
+		//"ghcr.io/devcontainers/features/go:1": {}
 		//"ghcr.io/devcontainers-contrib/features/protoc:1": {}
 	},
 

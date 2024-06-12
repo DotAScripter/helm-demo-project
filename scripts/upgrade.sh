@@ -72,7 +72,7 @@ for service in "${services[@]}"; do
         ;;
     ${CPPOD})
         log "Building ${CPPOD} app and image..."
-        make -C cppapp cppapp image
+        make -C cppapp protogen cppapp image
         log "Done building ${CPPOD} app and image"
 
         log "Loading docker image into kind cluster (this might take some time)..."
