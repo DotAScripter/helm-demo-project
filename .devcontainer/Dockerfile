@@ -33,4 +33,4 @@ RUN go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28
 RUN go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2
 RUN go install sigs.k8s.io/kind@v0.23.0
 
-RUN  apt-get clean -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get clean -y && rm -rf /var/lib/apt/lists/*

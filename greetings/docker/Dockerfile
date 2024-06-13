@@ -4,8 +4,6 @@ RUN apk add libc6-compat
 
 ARG PROJECT
 
-COPY ./${PROJECT} /usr/local/bin
+COPY ./${PROJECT} /usr/local/bin/greetings
 
-ENV ENTRYOINT_PATH="/usr/local/bin/${PROJECT}"
-
-ENTRYPOINT $ENTRYOINT_PATH
+ENTRYPOINT ["/usr/local/bin/greetings"]
