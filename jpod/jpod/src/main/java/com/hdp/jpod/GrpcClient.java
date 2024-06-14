@@ -2,7 +2,6 @@ package com.hdp.jpod;
 
 import java.util.concurrent.TimeUnit;
 
-import com.google.protobuf.GeneratedMessageV3;
 import com.hdp.jpod.proto.StatusGrpc;
 import com.hdp.jpod.proto.GreeterGrpc;
 import com.hdp.jpod.proto.GreeterGrpc.GreeterBlockingStub;
@@ -14,11 +13,9 @@ import com.hdp.jpod.proto.StatusOuterClass.StatusCheckResponse;
 
 import java.time.Duration;
 
-import io.grpc.ConnectivityState;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
-import io.grpc.stub.AbstractBlockingStub;
 
 public class GrpcClient {
     private final static Duration DEFAULT_TIMEOUT = Duration.ofSeconds(5);
@@ -47,16 +44,16 @@ public class GrpcClient {
             reply = blockingStub
                 .withDeadlineAfter(DEFAULT_TIMEOUT.toMillis(), TimeUnit.MILLISECONDS)
                 .checkStatus(request);
-            LogHandler.getInstance().debug("Client sent statuscheckreq");
-            LogHandler.getInstance().debug("Client got response: " + reply.getStatus());
+            LogHandler.getInstance().debug("Client sent statusCheckReq to: " + targetService.getServiceName());
+            LogHandler.getInstance().debug("Client got response from: " + targetService.getServiceName() + ": " + reply.getStatus());
         } catch (StatusRuntimeException e) {
-            e.printStackTrace();
+            LogHandler.getInstance().error("Error encountered when sending statusCheck to: " + targetService.getServiceName() + ". Reason: " + e.getMessage());
         } finally {
             channel.shutdown();
         }
         return reply;
     }
-    
+
     public HelloReply sayHello(ClusterService targetService) {
         ManagedChannel channel = null;
         try {

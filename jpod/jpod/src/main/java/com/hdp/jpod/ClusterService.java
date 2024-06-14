@@ -4,10 +4,10 @@ package com.hdp.jpod;
 //Representation of services in the cluster
 public enum ClusterService {
      // serviceIPEnv and servicePortEnv should represent the envs set in helm charts
-    CPPOD("Cppod", "CPPOD_SERVICE_IP", "CPPOD_SERVICE_PORT"),
-    PYPOD("Pypod", "PYPOD_SERVICE_IP", "PYPOD_SERVICE_PORT"),
-    JPOD("Jpod", "JPOD_SERVICE_IP", "JPOD_SERVICE_PORT"),
-    JPODHTTP("Jpod http", "JPOD_SERVICE_IP", "JPOD_HTTP_PORT");
+    CPPOD("Cppod", "CPPOD_SERVICE_IP", "CPPOD_SERVICE_PORT", true),
+    PYPOD("Pypod", "PYPOD_SERVICE_IP", "PYPOD_SERVICE_PORT", true),
+    JPOD("Jpod", "JPOD_SERVICE_IP", "JPOD_SERVICE_PORT", false),
+    JPODHTTP("Jpod http", "JPOD_SERVICE_IP", "JPOD_HTTP_PORT", false);
 
     public final static String DEFAULT_SERVICE_IP = "localhost";
     public final static int DEFAULT_SERVICE_PORT = 8082;
@@ -16,11 +16,13 @@ public enum ClusterService {
     String serviceName;
     String serviceIPEnv;
     String servicePortEnv;
+    boolean statusCheckEnabled;
 
-    ClusterService(String serviceName, String serviceIPEnv, String servicePortEnv) {
+    ClusterService(String serviceName, String serviceIPEnv, String servicePortEnv, boolean statusCheckEnabled) {
         this.serviceName = serviceName;
         this.serviceIPEnv = serviceIPEnv;
         this.servicePortEnv = servicePortEnv;
+        this.statusCheckEnabled = statusCheckEnabled;
     }
 
     public int readPortEnv(String servicePortEnv) {
@@ -58,4 +60,8 @@ public enum ClusterService {
     public int getServicePort() {
         return readPortEnv(servicePortEnv);
     }   
+
+    public boolean isStatusCheckEnabled() {
+        return statusCheckEnabled;
+    }
 }

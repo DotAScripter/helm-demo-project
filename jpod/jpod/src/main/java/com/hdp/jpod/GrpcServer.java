@@ -8,7 +8,6 @@ import com.hdp.jpod.proto.Helloworld.HelloRequest;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.ServerMethodDefinition;
 import io.grpc.stub.StreamObserver;
 
 public class GrpcServer extends GreeterImplBase implements IServer {

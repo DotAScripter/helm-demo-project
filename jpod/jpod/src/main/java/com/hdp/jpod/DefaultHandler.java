@@ -3,18 +3,13 @@ package com.hdp.jpod;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
-import java.nio.file.Files;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-import com.hdp.jpod.proto.Helloworld.HelloReply;
-import com.hdp.jpod.proto.Helloworld.HelloRequest;
 import com.hdp.jpod.proto.StatusOuterClass;
-import com.hdp.jpod.proto.StatusOuterClass.StatusCheckRequest;
 import com.hdp.jpod.proto.StatusOuterClass.StatusCheckResponse;
 
 public class DefaultHandler implements HttpHandler, IMessageHandler {
@@ -65,17 +60,19 @@ public class DefaultHandler implements HttpHandler, IMessageHandler {
             return json.toString();
     }
 
-    private String handleStatusCheck() { // Check all services here with ping request
+    private String handleStatusCheck() { // Check all available services here with ping request
         List<Service> services = new LinkedList<>();
-        boolean isUp;
 
-        StatusCheckResponse cppReply = client.checkStatus(ClusterService.CPPOD);
-        isUp = (cppReply.getStatus() == StatusOuterClass.StatusCheckResponse.ServiceStatus.OK);
-        services.add(new Service(ClusterService.CPPOD, isUp));
-
-        StatusCheckResponse pyReply = client.checkStatus(ClusterService.PYPOD);
-        isUp = (pyReply.getStatus() == StatusOuterClass.StatusCheckResponse.ServiceStatus.OK);
-        services.add(new Service(ClusterService.PYPOD, isUp));
+        for (ClusterService service : ClusterService.values()) {
+            if (service.isStatusCheckEnabled()) {
+                StatusCheckResponse response = client.checkStatus(service);
+                boolean isUp = false;
+                if (response != null) {
+                    isUp = (response.getStatus() == StatusOuterClass.StatusCheckResponse.ServiceStatus.OK);
+                }
+                services.add(new Service(service, isUp));
+            }
+        }
 
         return getServiceStatus(services);
     }
@@ -105,7 +102,7 @@ public class DefaultHandler implements HttpHandler, IMessageHandler {
             OutputStream os = exchange.getResponseBody();
             os.write(response.getBytes());
             os.close();
-            LogHandler.getInstance().debug("Http server sent response: " + response);
+            LogHandler.getInstance().debug("Http server sent response");
         } catch (IOException e) {
             e.printStackTrace();
         }
