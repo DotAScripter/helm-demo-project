@@ -20,9 +20,14 @@ spec:
         - name: {{ template "cpp.container-name" . }}
           image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
-            - containerPort: {{ .Values.env.service.port }}
+            - containerPort: {{ .Values.env.greeterService.port }}
+            - containerPort: {{ .Values.env.statusService.port }}
           env:
-            - name: SERVICE_PORT
-              value: {{ quote .Values.env.service.port }}
-            - name: SERVICE_ADDRESS
-              value: {{ quote .Values.env.service.address }}
+            - name: GREETER_SERVICE_PORT
+              value: {{ quote .Values.env.greeterService.port }}
+            - name: GREETER_SERVICE_ADDRESS
+              value: {{ quote .Values.env.greeterService.address }}
+            - name: STATUS_SERVICE_PORT
+              value: {{ quote .Values.env.statusService.port }}
+            - name: STATUS_SERVICE_ADDRESS
+              value: {{ quote .Values.env.statusService.address }}

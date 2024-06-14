@@ -8,7 +8,12 @@
     {{- printf "cppapp" -}}
 {{- end -}}
 
-{{/* Service name */}}
-{{- define "cpp.service-name" -}}
-    {{- printf "%s-service" .Chart.Name -}}
+{{/* Greeter service name */}}
+{{- define "cpp.greeter-service-name" -}}
+    {{- printf "%s-greeter-service" .Chart.Name -}}
+{{- end -}}
+
+{{/* Status service name */}}
+{{- define "cpp.status-service-name" -}}
+    {{- printf "%s-status-service" .Chart.Name -}}
 {{- end -}}

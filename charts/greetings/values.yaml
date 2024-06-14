@@ -9,7 +9,7 @@ env:
     host: redis-service
     port: 6379
   cppService:
-    host: cppod-service
+    host: cppod-greeter-service
     port: 50051
   jpodService:
     host: jpod-grpc-service

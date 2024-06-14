@@ -8,5 +8,5 @@ env:
     port: 8082
     httpport: 8083
   cppService:
-    host: cppod-service
+    host: cppod-greeter-service
     port: 50051
