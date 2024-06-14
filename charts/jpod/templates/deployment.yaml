@@ -30,3 +30,7 @@ spec:
               value: {{ quote .Values.env.cppService.host }}
             - name: CPPOD_SERVICE_PORT
               value: {{ quote .Values.env.cppService.port }}
+            - name: PYPOD_SERVICE_IP
+              value: {{ quote .Values.env.pyService.host }}
+            - name: PYPOD_SERVICE_PORT
+              value: {{ quote .Values.env.pyService.port }}

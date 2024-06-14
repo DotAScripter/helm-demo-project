@@ -13,6 +13,9 @@ import com.sun.net.httpserver.HttpHandler;
 
 import com.hdp.jpod.proto.Helloworld.HelloReply;
 import com.hdp.jpod.proto.Helloworld.HelloRequest;
+import com.hdp.jpod.proto.StatusOuterClass;
+import com.hdp.jpod.proto.StatusOuterClass.StatusCheckRequest;
+import com.hdp.jpod.proto.StatusOuterClass.StatusCheckResponse;
 
 public class DefaultHandler implements HttpHandler, IMessageHandler {
     private GrpcClient client;
@@ -64,10 +67,15 @@ public class DefaultHandler implements HttpHandler, IMessageHandler {
 
     private String handleStatusCheck() { // Check all services here with ping request
         List<Service> services = new LinkedList<>();
+        boolean isUp;
 
-        HelloReply cppReply = client.sayHello(ClusterService.CPPOD); // TODO change to status request
-        boolean isUp = (cppReply != null);
+        StatusCheckResponse cppReply = client.checkStatus(ClusterService.CPPOD);
+        isUp = (cppReply.getStatus() == StatusOuterClass.StatusCheckResponse.ServiceStatus.OK);
         services.add(new Service(ClusterService.CPPOD, isUp));
+
+        StatusCheckResponse pyReply = client.checkStatus(ClusterService.PYPOD);
+        isUp = (pyReply.getStatus() == StatusOuterClass.StatusCheckResponse.ServiceStatus.OK);
+        services.add(new Service(ClusterService.PYPOD, isUp));
 
         return getServiceStatus(services);
     }

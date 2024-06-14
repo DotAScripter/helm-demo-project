@@ -71,6 +71,7 @@ class StatusServiceImpl final : public status::Status::Service
     grpc::Status CheckStatus(ServerContext *context, const status::StatusCheckRequest *request, status::StatusCheckResponse *response) override
     {
         std::cout << "StatusServiceImpl handling StatusCheckRequest: " << request->DebugString() << std::endl;
+        response->set_status(status::StatusCheckResponse_ServiceStatus_OK);
         return grpc::Status::OK;
     }
 };

@@ -5,6 +5,7 @@ package com.hdp.jpod;
 public enum ClusterService {
      // serviceIPEnv and servicePortEnv should represent the envs set in helm charts
     CPPOD("Cppod", "CPPOD_SERVICE_IP", "CPPOD_SERVICE_PORT"),
+    PYPOD("Pypod", "PYPOD_SERVICE_IP", "PYPOD_SERVICE_PORT"),
     JPOD("Jpod", "JPOD_SERVICE_IP", "JPOD_SERVICE_PORT"),
     JPODHTTP("Jpod http", "JPOD_SERVICE_IP", "JPOD_HTTP_PORT");
 
