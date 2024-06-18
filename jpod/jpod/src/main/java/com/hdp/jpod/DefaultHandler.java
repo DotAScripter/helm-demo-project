@@ -3,7 +3,7 @@ package com.hdp.jpod;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -12,10 +12,9 @@ import com.sun.net.httpserver.HttpHandler;
 import com.hdp.jpod.proto.StatusOuterClass;
 import com.hdp.jpod.proto.StatusOuterClass.StatusCheckResponse;
 
-public class DefaultHandler implements HttpHandler, IMessageHandler {
+public class DefaultHandler implements HttpHandler {
     private GrpcClient client;
 
-    @Override
     public GrpcClient getClient() {
         return client;
     }
@@ -28,29 +27,33 @@ public class DefaultHandler implements HttpHandler, IMessageHandler {
         private ClusterService clusterService;
         private boolean isUp;
 
-        public Service(ClusterService clusterService, boolean isUp) {
+        Service(ClusterService clusterService, boolean isUp) {
             this.clusterService = clusterService;
             this.isUp = isUp;
         }
         
-        public ClusterService getClusterService() {
+        String toJson() {
+            return "{\"name\":\"" + getClusterService().getServiceName() + 
+                 "\",\"isActive\":\"" + isUp()
+                + "\"}";
+        }
+
+        ClusterService getClusterService() {
             return clusterService;
         }
 
-        public boolean isUp() {
+        boolean isUp() {
             return isUp;
         }
     }
 
-    private String getServiceStatus(List<Service> services) {
+    private String getServiceStatusToJsonString(List<Service> services) {
             StringBuilder json = new StringBuilder();
             json.append("[");
 
             int i = 0;
             for (Service service : services) {
-                json.append("{\"name\":\"" + service.getClusterService().getServiceName() + 
-                            "\",\"isActive\":\"" + service.isUp()
-                        + "\"}");
+                json.append(service.toJson());
                 if (i < services.size() - 1) {
                     json.append(",");
                 }
@@ -61,7 +64,7 @@ public class DefaultHandler implements HttpHandler, IMessageHandler {
     }
 
     private String handleStatusCheck() { // Check all available services here with ping request
-        List<Service> services = new LinkedList<>();
+        ArrayList<Service> services = new ArrayList<>();
 
         for (ClusterService service : ClusterService.values()) {
             if (service.isStatusCheckEnabled()) {
@@ -73,8 +76,8 @@ public class DefaultHandler implements HttpHandler, IMessageHandler {
                 services.add(new Service(service, isUp));
             }
         }
-
-        return getServiceStatus(services);
+        
+        return getServiceStatusToJsonString(services);
     }
 
     public String getResource(String request) throws IOException {

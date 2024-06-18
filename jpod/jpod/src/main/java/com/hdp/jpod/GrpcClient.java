@@ -26,7 +26,7 @@ public class GrpcClient {
             .build();
             return channel;
     }
-    
+
     public StatusCheckResponse checkStatus(ClusterService targetService) {
         ManagedChannel channel = null;
         try {

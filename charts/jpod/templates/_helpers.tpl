@@ -13,7 +13,12 @@
     {{- printf "%s-http-service" .Chart.Name -}}
 {{- end -}}
 
-{{/* gRPC service name */}}
-{{- define "jpod.grpc-service-name" -}}
-    {{- printf "%s-grpc-service" .Chart.Name -}}
+{{/* Status service name */}}
+{{- define "jpod.status-service-name" -}}
+    {{- printf "%s-status-service" .Chart.Name -}}
+{{- end -}}
+
+{{/* Greeter service name */}}
+{{- define "jpod.greeter-service-name" -}}
+    {{- printf "%s-greeter-service" .Chart.Name -}}
 {{- end -}}

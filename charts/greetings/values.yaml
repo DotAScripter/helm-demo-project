@@ -12,7 +12,7 @@ env:
     host: cppod-greeter-service
     port: 50051
   jpodService:
-    host: jpod-grpc-service
+    host: jpod-greeter-service
     port: 8082
   pypodService:
     host: pypod-greeter-service

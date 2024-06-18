@@ -3,10 +3,15 @@ image:
   repository: jpod
   tag: "1.0"
 env: 
-  jpod:
-    host: jpod-grpc-service
+  jpodGreeterService:
+    host: jpod-greeter-service
     port: 8082
-    httpport: 8083
+  jpodStatusService:
+    host: jpod-status-service
+    port: 8083
+  jpodHttpService:
+    host: jpod-http-service
+    port: 8084
   cppService:
     host: cppod-status-service
     port: 50052

@@ -32,6 +32,7 @@ public class JHttpServer implements IServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        LogHandler.getInstance().info("Http server is ready on port: " + ClusterService.JPOD_HTTP.getServicePort());
     }
 
     @Override

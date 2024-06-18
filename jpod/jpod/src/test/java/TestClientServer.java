@@ -3,14 +3,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-
 import org.junit.Test;
 
-import com.google.protobuf.GeneratedMessageV3;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.hdp.jpod.ClusterService;
 import com.hdp.jpod.GrpcClient;
-import com.hdp.jpod.GrpcServer;
+import com.hdp.jpod.GreeterServer;
 import com.hdp.jpod.IServer;
 import com.hdp.jpod.LogHandler;
 import com.hdp.jpod.proto.Helloworld.HelloReply;
@@ -22,7 +20,7 @@ public class TestClientServer {
         GrpcClient client = new GrpcClient();
         IServer server = null;
 
-        server = new GrpcServer(ClusterService.JPOD.getServicePort());
+        server = new GreeterServer(ClusterService.JPOD_GREETER.getServicePort());
         server.start();
 
         try {
@@ -33,12 +31,10 @@ public class TestClientServer {
         }
         assertTrue(server.isUp());
     
-        HelloReply response = client.sayHello(ClusterService.JPOD);
+        HelloReply response = client.sayHello(ClusterService.JPOD_GREETER);
         
         assertEquals("default reply", response.getMessage());
         server.stop();
         assertFalse(server.isUp());
-
     } 
-    
 }

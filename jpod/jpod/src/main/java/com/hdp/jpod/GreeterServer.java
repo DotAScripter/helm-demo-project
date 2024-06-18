@@ -10,15 +10,16 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.stub.StreamObserver;
 
-public class GrpcServer extends GreeterImplBase implements IServer {
+public class GreeterServer extends GreeterImplBase implements IServer {
     private Server server;
     private boolean isUp;
 
-    public GrpcServer() {
+    public GreeterServer() {
     }
-    public GrpcServer(int serverPortNumber) {
+    
+    public GreeterServer(int serverPortNumber) {
         server = ServerBuilder.forPort(serverPortNumber)
-            .addService(new GrpcServer())  
+            .addService(new GreeterServer())  
             .build();
      }
 
@@ -29,6 +30,7 @@ public class GrpcServer extends GreeterImplBase implements IServer {
             e.printStackTrace();
         }
         isUp = true;
+        LogHandler.getInstance().info("Greeter server is ready on port: " + ClusterService.JPOD_GREETER.getServicePort());
     }
 
     public void stop() {

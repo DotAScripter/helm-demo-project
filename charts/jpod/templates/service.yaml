@@ -8,7 +8,7 @@ spec:
     release: {{ .Release.Name }}
   ports:
     - protocol: TCP
-      port: {{ .Values.env.jpod.httpport }}
-      targetPort: {{ .Values.env.jpod.httpport }}
+      port: {{ .Values.env.jpodHttpService.port }}
+      targetPort: {{ .Values.env.jpodHttpService.port }}
       nodePort: 30001
   type: NodePort

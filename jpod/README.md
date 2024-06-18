@@ -5,15 +5,9 @@
 2. Compile Java code
 'make build' 
 
-3. Setup port (optional)
-To set the inter-service port, run:
-'export JPOD_SERVICE_PORT=[port]'
-If not set, this will default to 8082
-
-To set the http port, run:
-'export JPOD_HTTP_PORT=[port]'
-If not set, this will default to 8083
-
+3. Setup ports and IP addresses
+To set the service ports and addresses,
+specify all env variables used in ClusterService.java
 
 4. Run executable
 'java -jar ./target/jpod-1.0.jar' 
@@ -25,4 +19,4 @@ In top directory of project run:
 6. Run docker image
 When docker image with tag 'jpod' is built run:
 'docker run -p [port]:[port] jpod'
-[port] should be 'JPOD_HTTP_PORT'. If not set, it should be 8082
+[port] should be 'JPOD_HTTP_PORT'.

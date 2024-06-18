@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "jpod.status-service-name" . }}
+spec:
+  selector:
+    app: {{ template "jpod.name" . }}
+    release: {{ .Release.Name }}
+  ports:
+    - protocol: TCP
+      port: {{ .Values.env.jpodStatusService.port }}
+      targetPort: {{ .Values.env.jpodStatusService.port }}
