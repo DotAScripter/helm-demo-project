@@ -40,3 +40,7 @@ spec:
               value: {{ quote .Values.env.pyService.host }}
             - name: PYPOD_SERVICE_PORT
               value: {{ quote .Values.env.pyService.port }}
+            - name: GREETINGS_SERVICE_IP
+              value: {{ quote .Values.env.greetingsService.host }}
+            - name: GREETINGS_SERVICE_PORT
+              value: {{ quote .Values.env.greetingsService.port }}

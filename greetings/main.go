@@ -2,17 +2,22 @@ package main
 
 import (
 	"log/slog"
+	"net"
 	"os"
 
 	"github.com/DotAScripter/helm-demo-project/greetings/client"
 	"github.com/DotAScripter/helm-demo-project/greetings/kvdb"
+	"github.com/DotAScripter/helm-demo-project/greetings/proto/status"
 	"github.com/DotAScripter/helm-demo-project/greetings/service"
+	srv "github.com/DotAScripter/helm-demo-project/greetings/service"
+	"google.golang.org/grpc"
 )
 
 const (
-	defaultHttpPort  = "3000"
-	defaultRedisHost = "redis"
-	defaultRedisPort = "6379"
+	defaultStatusServicePort = "3001"
+	defaultHttpPort          = "3000"
+	defaultRedisHost         = "redis"
+	defaultRedisPort         = "6379"
 )
 
 func main() {
@@ -21,9 +26,25 @@ func main() {
 	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: logLevel}))
 	slog.SetDefault(logger)
 
+	statusServicePort := readEnv("STATUS_SERVICE_PORT", defaultStatusServicePort)
 	httpPort := readEnv("HTTP_PORT", defaultHttpPort)
 	redisHost := readEnv("REDIS_HOST", defaultRedisHost)
 	redisPort := readEnv("REDIS_PORT", defaultRedisPort)
+
+	lis, err := net.Listen("tcp", ":"+statusServicePort)
+	if err != nil {
+		slog.Error("Failed to listen to status service port", "err", err)
+	}
+
+	grpcServer := grpc.NewServer()
+	status.RegisterStatusServer(grpcServer, &srv.StatusServer{})
+
+	go func() {
+		if err := grpcServer.Serve(lis); err != nil {
+			slog.Error("Failed to start status server", "err", err)
+		}
+	}()
+	slog.Info("Started", "statusPort", statusServicePort)
 
 	slog.Info("Started", "httpPort", httpPort, "redisHost", redisHost, "redisPort", redisPort)
 

@@ -5,6 +5,7 @@ package com.hdp.jpod;
 public enum ClusterService {
     CPPOD("Cppod", "CPPOD_SERVICE_IP", "CPPOD_SERVICE_PORT", true),
     PYPOD("Pypod", "PYPOD_SERVICE_IP", "PYPOD_SERVICE_PORT", true),
+    GREETINGS("Greetings", "GREETINGS_SERVICE_IP", "GREETINGS_SERVICE_PORT", true),
     JPOD_GREETER("Jpod greeter", "JPOD_GREETER_SERVICE_IP", "JPOD_GREETER_SERVICE_PORT", false),
     JPOD_STATUS("Jpod status", "JPOD_STATUS_SERVICE_IP", "JPOD_STATUS_SERVICE_PORT", true),
     JPOD_HTTP("Jpod http", "JPOD_HTTP_SERVICE_IP", "JPOD_HTTP_PORT", false);

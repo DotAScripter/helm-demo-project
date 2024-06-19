@@ -5,6 +5,9 @@ image:
 env:
   service:
     port: 3000
+  statusService:
+    host: greetings-status-service
+    port: 3001
   redis:
     host: redis-service
     port: 6379
