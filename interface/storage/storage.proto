@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+package storage;
+option go_package = "github.com/DotAScripter/helm-demo-project/greetings/proto/storage";
+option java_package = "com.hdp.jpod.proto";
+
+service Storage {
+  rpc StorePost (StorePostRequest) returns (StorePostResponse) {}
+  rpc GetPosts (GetPostsRequest) returns (GetPostsResponse) {}
+}
+
+message Post {
+  int32 id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  string author = 3;
+  string message = 4;
+}
+
+enum Status {
+  UNKNOWN = 0;
+  SUCCESS = 1;
+  DB_UNAVAILABLE = 2;
+  INTERNAL_ERROR = 3;
+}
+
+message StorePostRequest {
+  int32 id = 1;
+  Post post = 2;
+}
+
+message StorePostResponse {
+  int32 id = 1;
+  Status status = 2;
+}
+
+message GetPostsRequest {
+  int32 id = 1;
+  google.protobuf.Timestamp after = 2;
+}
+
+message GetPostsResponse {
+  int32 id = 1;
+  Status status = 2;
+  repeated Post post_list = 3;
+}
